@@ -5,6 +5,23 @@ from django.db.models import Avg
 
 
 
+class MovieItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = '__all__'
+
+class DirectorItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Director
+        fields = '__all__'
+
+class ReviewItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = '__all__'
+
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
