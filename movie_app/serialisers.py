@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from movie_app.models import Movie, Director, Review
 from django.db.models import Avg
+from rest_framework.exceptions import ValidationError
 
 
 
@@ -46,3 +47,25 @@ class DirectorSerializer(serializers.ModelSerializer):
         fields = 'id name movie_count'.split()
 
 
+class MovieValidateSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=100, min_length=1)
+    description = serializers.CharField(max_length=200, required=False, default="Great movie!!")
+    duration = serializers.IntegerField(required=False, min_value=10, default=120)
+    director_id = serializers.IntegerField(min_value=1)
+
+    def validate_director_id(self, director_id):
+        try:
+            Director.objects.get(id=director_id)
+        except:
+            raise serializers.ValidationError("Director does not exist")
+        return director_id
+
+
+class DirectorValidateSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=100, min_length=5)
+
+
+class ReviewValidateSerializer(serializers.Serializer):
+    text = serializers.CharField(max_length=200, min_length=10)
+    movie_id = serializers.IntegerField(min_value=1)
+    stars = serializers.IntegerField(min_value=1)
