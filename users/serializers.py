@@ -3,10 +3,14 @@ from django.contrib.auth.models import User
 from rest_framework.exceptions import ValidationError
 
 
-class UserBaseSerializer(serializers.Serializer):
+class UserBaseSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=150)
     password = serializers.CharField()
     email = serializers.EmailField()
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
 
 
 class UserAuthSerializer(UserBaseSerializer):
